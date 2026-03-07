@@ -1,0 +1,22 @@
+{
+    "name": "mhakkou/notifier",
+    "description": "Multichannel notification sender",
+    "type": "library",
+    "authors": [
+        {
+            "name" : "Hakkou Mouataz",
+            "email" : "moataz.hakkou@gmail.com"
+        }
+    ],
+    "require":{
+        "php":">=8.1"
+    },
+    "keywords": ["notifier", "slack", "notification", "telegram", "email"],
+    "license":"MIT",
+
+    "autoload": {
+        "psr-4":{
+            "Mhakkou\\Notifier\\": "src/"
+        }
+    }
+}
