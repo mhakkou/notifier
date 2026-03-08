@@ -10,6 +10,7 @@ A framework-agnostic PHP notification package for sending messages across multip
 - Implements **Factory pattern** for easy channel creation
 - Implements **Command pattern** for queuing and executing multiple notifications
 - PSR-4 autoloading via Composer
+- Implements **Chain of Responsibility pattern** for priority-based notification routing
 
 ## Requirements
 
@@ -89,14 +90,20 @@ src/
 │   └── NotificationFactory.php     # Factory for creating notification channels
 ├── Commands/
 │   └── SendNotificationCommand.php # Command pattern implementation
-└── Services/
-    └── NotificationInvoker.php     # Invoker that queues and runs commands
+├── Services/
+|    └── NotificationInvoker.php     # Invoker that queues and runs commands
+├── Handlers/
+│   ├── BaseNotificationHandler.php
+│   ├── SlackNotificationHandler.php
+│   ├── TelegramNotificationHandler.php
+│   └── EmailNotificationHandler.php
 
 examples/
 ├── send_email.php
 ├── send_telegram.php
 ├── send_slack.php
 └── send_multiple.php
+└── chain_of_responsibility.php
 ```
 
 ## Examples
@@ -108,6 +115,15 @@ Ready-to-run examples are available in the [`examples/`](examples/) directory.
 1. Create a new class in `src/Notifications/` extending `BaseNotification`
 2. Implement the `send()` method
 3. Register it in `NotificationFactory`
+
+### Route by priority (Chain of Responsibility pattern)
+
+$slack = new SlackNotificationHandler();
+$telegram = new TelegramNotificationHandler();
+$email = new EmailNotificationHandler();
+
+$slack->setNext($telegram)->setNext($email);
+$slack->handle('high', 'sender', 'recipient', 'subject', 'message');
 
 ## License
 
