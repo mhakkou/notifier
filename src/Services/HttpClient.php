@@ -1,6 +1,7 @@
 <?php
 
 namespace Mhakkou\Notifier\Services;
+use Mhakkou\Notifier\Traits\Loggable;
 
 
 class HttpClient {

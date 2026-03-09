@@ -3,12 +3,8 @@
 namespace Mhakkou\Notifier\Notifications;
 
 use Mhakkou\Notifier\Contracts\NotificationInterface;
+use Mhakkou\Notifier\Traits\Loggable;
 
 abstract class BaseNotification implements NotificationInterface{
-
-protected function log($recipient): void
-{
-    echo "[LOG] Notification sent to $recipient";
-}
-
+    use Loggable;
 }

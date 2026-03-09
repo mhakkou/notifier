@@ -5,6 +5,9 @@ namespace Mhakkou\Notifier\Notifications;
 use Dotenv\Exception\InvalidPathException;
 use Mhakkou\Notifier\Services\HttpClient;
 
+/**
+ * @mixin \Mhakkou\Notifier\Traits\Loggable
+ */
 class TelegramNotification extends BaseNotification{
 
     public function __construct(private string $sender, private HttpClient $client)
