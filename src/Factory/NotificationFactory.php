@@ -7,6 +7,7 @@ use Mhakkou\Notifier\Notifications\SlackNotification;
 use Mhakkou\Notifier\Notifications\TelegramNotification;
 use InvalidArgumentException;
 use Mhakkou\Notifier\Contracts\NotificationInterface;
+use Mhakkou\Notifier\Services\HttpClient;
 
 class NotificationFactory {
     public const EMAIL_NOTIFICATION = "email_type";
@@ -17,7 +18,7 @@ class NotificationFactory {
     {
         return match($notificationType){
             self::EMAIL_NOTIFICATION => new EmailNotification(),
-            self::TELEGRAM_NOTIFICATION => new TelegramNotification(),
+            self::TELEGRAM_NOTIFICATION => new TelegramNotification(new HttpClient()),
             self::SLACK_NOTIFICATION => new SlackNotification(),
             default => throw new InvalidArgumentException("Invalid notification type : $notificationType")
 
