@@ -7,7 +7,7 @@ use Mhakkou\Notifier\Services\HttpClient;
 
 class TelegramNotification extends BaseNotification{
 
-    public function __construct(private HttpClient $client)
+    public function __construct(private string $sender, private HttpClient $client)
     {}
 
     public function send(string $sender, ?string $recipient, string $subject, string $message):void
@@ -18,7 +18,7 @@ class TelegramNotification extends BaseNotification{
 
         $params = [
             'chat_id' => $recipient,
-            'text' => "Message from ".$sender."\n Subject : ". $subject ."\n" .$message
+            'text' => "Message from ".$this->sender."\n Subject : ". $subject ."\n" .$message
         ];
 
         try{
@@ -30,9 +30,16 @@ class TelegramNotification extends BaseNotification{
         
     }
 
-    public function sendToMany():void
+    public function sendToMany(string $subject, string $message, string ...$chatIds):void
     {
-        
+        try{
+            foreach($chatIds as $chatid){
+                $this->send( $this->sender, $chatid, $subject, $message);
+            }
+
+        }catch(\Exception $e){
+            $this->log($e->getMessage());
+        } 
     }
 
 }

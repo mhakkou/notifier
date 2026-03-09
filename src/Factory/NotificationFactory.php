@@ -14,11 +14,11 @@ class NotificationFactory {
     public const TELEGRAM_NOTIFICATION = "telegram_type";
     public const SLACK_NOTIFICATION = "slack_type";
 
-    public static function create(string $notificationType): NotificationInterface
+    public static function create(string $sender, string $notificationType): NotificationInterface
     {
         return match($notificationType){
             self::EMAIL_NOTIFICATION => new EmailNotification(),
-            self::TELEGRAM_NOTIFICATION => new TelegramNotification(new HttpClient()),
+            self::TELEGRAM_NOTIFICATION => new TelegramNotification($sender, new HttpClient()),
             self::SLACK_NOTIFICATION => new SlackNotification(),
             default => throw new InvalidArgumentException("Invalid notification type : $notificationType")
 
