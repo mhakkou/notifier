@@ -45,4 +45,15 @@ class TelegramNotification extends BaseNotification{
         } 
     }
 
+    public function __toString():string
+    {
+        return "[TELEGRAM NOTIFICATION] Sender: $this->sender | Chanel: Telegram ";
+    }
+
+
+    public function __destruct()
+    {
+        $this->log("[TelegramNotification] Instance destroyed.");
+    }
+
 }
