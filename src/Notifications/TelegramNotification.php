@@ -3,6 +3,7 @@
 namespace Mhakkou\Notifier\Notifications;
 
 use Dotenv\Exception\InvalidPathException;
+use Mhakkou\Notifier\Enums\LogLevel;
 use Mhakkou\Notifier\Services\HttpClient;
 
 /**
@@ -10,7 +11,7 @@ use Mhakkou\Notifier\Services\HttpClient;
  */
 class TelegramNotification extends BaseNotification{
 
-    public function __construct(private string $sender, private HttpClient $client)
+    public function __construct(private readonly string $sender, private readonly HttpClient $client)
     {}
 
     public function send(string $sender, ?string $recipient, string $subject, string $message):void
@@ -26,9 +27,11 @@ class TelegramNotification extends BaseNotification{
 
         try{
             $res =  $this->client->sendRequest($url, $params);
-            $this->log($res);
+            self::$notificationCount ++;
+
+            $this->log(logLevel: LogLevel::INFO, logMessage: $res);
         }catch(\Exception $e){
-            $this->log($e->getMessage());
+            $this->log(logLevel: LogLevel::ERROR, logMessage: $e->getMessage());
         }
         
     }
@@ -37,12 +40,25 @@ class TelegramNotification extends BaseNotification{
     {
         try{
             foreach($chatIds as $chatid){
-                $this->send( $this->sender, $chatid, $subject, $message);
+                $this->send( sender: $this->sender, recipient: $chatid, subject: $subject, message: $message);
             }
+            $this->log(logLevel: LogLevel::INFO, logMessage: "Notification Sent !");
 
         }catch(\Exception $e){
-            $this->log($e->getMessage());
+            $this->log(logLevel: LogLevel::ERROR, logMessage: $e->getMessage());
         } 
+    }
+
+    public function sendWithMiddleware(string $message, string $subject,  callable ...$midleware){
+        foreach($midleware as $m){
+            $message = $m($message);
+        }
+
+        if($message != null && $message != ""){
+            $this->send(sender: $this->sender, recipient: null, subject: $subject, message: $message );
+            }else{
+                $this->log(logLevel: LogLevel::WARNING, logMessage: "Message corrupted or invalid !");
+            }
     }
 
     public function __toString():string
@@ -53,7 +69,7 @@ class TelegramNotification extends BaseNotification{
 
     public function __destruct()
     {
-        $this->log("[TelegramNotification] Instance destroyed.");
+        $this->log(logLevel: LogLevel::INFO,   logMessage: "[TelegramNotification] Instance destroyed.");
     }
 
 }
