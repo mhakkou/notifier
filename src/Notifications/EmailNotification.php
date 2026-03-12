@@ -7,9 +7,9 @@ use Mhakkou\Notifier\Enums\LogLevel;
 
 class EmailNotification extends BaseNotification{
 
-    public function send(string $sender, ?string $recipient, string $subject, string $message):void
+    public function send(string $sender, ?string $recipient, string $subject, string $message):string 
     {
-        echo "Message sent to $recipient via Email channel !";
+        return "Message sent to $recipient via Email channel !";
         $this->log(logLevel: LogLevel::INFO, logMessage: 'Notification sent');
     }
 }

@@ -8,9 +8,10 @@ use Mhakkou\Notifier\Enums\LogLevel;
 
 class SlackNotification extends BaseNotification{
 
-    public function send(string $sender, ?string $recipient, string $subject, string $message):void
+    public function send(string $sender, ?string $recipient, string $subject, string $message):string
     {
-        echo "Message sent to $recipient via Slack channel !";
         $this->log(logLevel: LogLevel::INFO,logMessage: 'Notification sent');
+        return "Message sent to $recipient via Slack channel !";
+        
     }
 }
