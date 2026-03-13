@@ -2,23 +2,24 @@
 
 namespace Mhakkou\Notifier\Factory;
 
-use Mhakkou\Notifier\Notifications\EmailNotification;
-use Mhakkou\Notifier\Notifications\SlackNotification;
-use Mhakkou\Notifier\Notifications\TelegramNotification;
-use InvalidArgumentException;
+use Exception;
 use Mhakkou\Notifier\Contracts\NotificationInterface;
 use Mhakkou\Notifier\Enums\NotificationChannel;
-use Mhakkou\Notifier\Services\HttpClient;
 
 class NotificationFactory {
+    private static array $registry = [];
 
-    public static function create(string $sender, NotificationChannel $chanel): NotificationInterface
+    public static function register(NotificationChannel $notificationChannel, string $class):void
     {
-        return match($chanel){
-            NotificationChannel::EMAIL => new EmailNotification(),
-            NotificationChannel::TELEGRAM => new TelegramNotification($sender, new HttpClient()),
-            NotificationChannel::SLACK => new SlackNotification(),
-        };
+        self::$registry[$notificationChannel->value ] = $class;
+    }
+
+    public static function create(string $sender, NotificationChannel $channel): NotificationInterface
+    {
+        if(!array_key_exists($channel->value, self::$registry)){
+            throw new \InvalidArgumentException("Unsupported channel: {$channel->value}");
+        }
+        return new self::$registry[$channel->value]($sender);
     }
 }
 
