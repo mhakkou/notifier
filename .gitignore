@@ -3,3 +3,4 @@
 .env
 composer.lock
 checklist.md
+violations.txt

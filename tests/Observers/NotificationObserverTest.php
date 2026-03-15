@@ -4,6 +4,7 @@ namespace Tests\Observers;
 
 use Mhakkou\Notifier\Contracts\ObserverInterface;
 use Mhakkou\Notifier\Services\Notification;
+use Mhakkou\Notifier\Services\NotificationDispatcher;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,7 +21,7 @@ class NotificationObserverTest extends TestCase{
      * @test
      */
     public function testAttacheObserver(){
-        $notification = new Notification('mhakkou', 'some id', 'test subject', 'test message');
+        $notification = new NotificationDispatcher('mhakkou', 'some id', 'test subject', 'test message');
 
         $mock = $this->createMock(ObserverInterface::class);
         $mock->expects($this->once())
@@ -38,7 +39,7 @@ class NotificationObserverTest extends TestCase{
      * @test
      */
     public function testDetacheObserver(){
-        $notification = new Notification('mhakkou', 'some id', 'test subject', 'test message');
+        $notification = new NotificationDispatcher('mhakkou', 'some id', 'test subject', 'test message');
 
         $mock = $this->createMock(ObserverInterface::class);
         $mock->expects($this->never())
@@ -61,7 +62,7 @@ class NotificationObserverTest extends TestCase{
      * @test
      */
     public function testNotifyObserver(){
-        $notification = new Notification('mhakkou', 'some id', 'test subject', 'test message');
+        $notification = new NotificationDispatcher('mhakkou', 'some id', 'test subject', 'test message');
 
         $mock = $this->createMock(ObserverInterface::class);
         $mock->expects($this->once())

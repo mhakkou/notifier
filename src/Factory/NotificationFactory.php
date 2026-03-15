@@ -5,6 +5,7 @@ namespace Mhakkou\Notifier\Factory;
 use Exception;
 use Mhakkou\Notifier\Contracts\NotificationInterface;
 use Mhakkou\Notifier\Enums\NotificationChannel;
+use Mhakkou\Notifier\Services\HttpClient;
 
 class NotificationFactory {
     private static array $registry = [];
@@ -14,12 +15,15 @@ class NotificationFactory {
         self::$registry[$notificationChannel->value ] = $class;
     }
 
-    public static function create(string $sender, NotificationChannel $channel): NotificationInterface
+    public static function create(string $sender, NotificationChannel $channel, ?HttpClient $client = null): NotificationInterface
     {
         if(!array_key_exists($channel->value, self::$registry)){
             throw new \InvalidArgumentException("Unsupported channel: {$channel->value}");
         }
-        return new self::$registry[$channel->value]($sender);
+        return match($channel) {
+            NotificationChannel::TELEGRAM => new self::$registry[$channel->value]($sender, $client ?? new HttpClient()),
+            default => new self::$registry[$channel->value]($sender)
+        };
     }
 }
 

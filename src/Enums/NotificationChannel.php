@@ -2,9 +2,8 @@
 
 namespace Mhakkou\Notifier\Enums;
 
-Enum NotificationChannel{
-    case TELEGRAM;
-    case EMAIL;
-    case SLACK;
-
+Enum NotificationChannel: string {
+    case TELEGRAM = 'telegram';
+    case EMAIL = 'email';
+    case SLACK = 'slack';
 }

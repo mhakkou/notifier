@@ -16,8 +16,12 @@
     "license":"MIT",
 
     "autoload": {
-        "psr-4":{
-            "Mhakkou\\Notifier\\": "src/",
+        "psr-4": {
+            "Mhakkou\\Notifier\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Tests\\": "tests/"
         }
     },
